@@ -1,0 +1,35 @@
+diff --git a/setup.py b/setup.py
+index 5c29118..f8b8abd 100644
+--- a/setup.py
++++ b/setup.py
+@@ -54,6 +54,12 @@ base_wheel_bundles = [
+         "platform": "linux",
+         "zip_name": "linux-arm64",
+     },
++    {
++        "wheel": "manylinux_2_38_loongarch64.whl",
++        "machine": "loongarch64",
++        "platform": "linux",
++        "zip_name": "linux-loong64",
++    },
+     {
+         "wheel": "win32.whl",
+         "machine": "i386",
+@@ -102,7 +108,7 @@ def download_driver(zip_name: str) -> None:
+     destination_path = "driver/" + zip_file
+     if os.path.exists(destination_path):
+         return
+-    url = "https://playwright.azureedge.net/builds/driver/"
++    url = f"https://github.com/loong64/playwright/releases/download/v{driver_version}/"
+     if (
+         "-alpha" in driver_version
+         or "-beta" in driver_version
+@@ -113,7 +119,7 @@ def download_driver(zip_name: str) -> None:
+     temp_destination_path = destination_path + ".tmp"
+     print(f"Fetching {url}")
+     # Don't replace this with urllib - Python won't have certificates to do SSL on all platforms.
+-    subprocess.check_call(["curl", url, "-o", temp_destination_path])
++    subprocess.check_call(["curl", url, "-Lo", temp_destination_path])
+     os.rename(temp_destination_path, destination_path)
+ 
+ 
