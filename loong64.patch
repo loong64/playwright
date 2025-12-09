@@ -1,5 +1,5 @@
 diff --git a/setup.py b/setup.py
-index 5433955..d9bd2cc 100644
+index fa81e5e..43f4f97 100644
 --- a/setup.py
 +++ b/setup.py
 @@ -54,6 +54,12 @@ base_wheel_bundles = [
@@ -19,7 +19,7 @@ index 5433955..d9bd2cc 100644
      destination_path = "driver/" + zip_file
      if os.path.exists(destination_path):
          return
--    url = "https://playwright.azureedge.net/builds/driver/"
+-    url = "https://cdn.playwright.dev/builds/driver/"
 +    url = f"https://github.com/loong64/playwright/releases/download/v{driver_version}/"
      if (
          "-alpha" in driver_version
