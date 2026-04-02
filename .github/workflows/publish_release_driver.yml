@@ -17,12 +17,12 @@ env:
 jobs:
   check-driver-release:
     name: "check playwright driver"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     outputs:
       create: ${{ steps.check-release.outputs.create }}
       version: ${{ steps.get-version.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Get Version
         id: get-version
@@ -57,18 +57,18 @@ jobs:
     if: needs.check-driver-release.outputs.create == '1'
     env:
       app_version: ${{ needs.check-driver-release.outputs.version }}
-      node-version: 18
+      node-version: 20
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         repository: microsoft/playwright
         ref: ${{ env.app_version }}
 
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3
+      uses: docker/setup-qemu-action@v4
 
     - name: Setup Docker Buildx
-      uses: docker/setup-buildx-action@v3
+      uses: docker/setup-buildx-action@v4
 
     - name: Build Playwright Driver
       run: |
@@ -82,7 +82,7 @@ jobs:
           --env electron_use_remote_checksums=1 \
           --volume $(pwd):/app \
           --workdir /app \
-          ghcr.io/loong64/node:${{ env.node-version }} \
+          ghcr.io/loong64/node:${{ env.node-version }}-trixie \
           /bin/bash -c "apt-get update && apt-get install -y git curl zip && npm install electron@37.2.5 && npm ci && npm run build && ./utils/build/build-playwright-driver.sh"
     
     - name: GitHub Release
